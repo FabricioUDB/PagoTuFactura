@@ -1,7 +1,10 @@
+
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   signOut,
+  GoogleAuthProvider,
+  signInWithPopup,
 } from 'firebase/auth';
 import { auth } from './config';
 import { loginSchema, signupSchema } from '@/lib/schemas';
@@ -26,6 +29,17 @@ export async function signInWithEmail(data: z.infer<typeof loginSchema>) {
     return { user: null, error: error as Error };
   }
 }
+
+export async function signInWithGoogle() {
+  const provider = new GoogleAuthProvider();
+  try {
+    const result = await signInWithPopup(auth, provider);
+    return { user: result.user, error: null };
+  } catch (error) {
+    return { user: null, error: error as Error };
+  }
+}
+
 
 export async function logout() {
   try {
