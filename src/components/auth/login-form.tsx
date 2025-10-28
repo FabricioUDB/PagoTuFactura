@@ -30,7 +30,7 @@ export function LoginForm() {
     const { error } = await signInWithEmail(values);
     if (error) {
       toast({
-        title: 'Login Failed',
+        title: 'Error de Inicio de Sesión',
         description: error.message,
         variant: 'destructive',
       });
@@ -42,8 +42,8 @@ export function LoginForm() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Welcome Back</CardTitle>
-        <CardDescription>Enter your credentials to access your account.</CardDescription>
+        <CardTitle>Bienvenido de Nuevo</CardTitle>
+        <CardDescription>Introduce tus credenciales para acceder a tu cuenta.</CardDescription>
       </CardHeader>
       <CardContent>
         <Form {...form}>
@@ -53,9 +53,9 @@ export function LoginForm() {
               name="email"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Email</FormLabel>
+                  <FormLabel>Correo Electrónico</FormLabel>
                   <FormControl>
-                    <Input placeholder="name@example.com" {...field} />
+                    <Input placeholder="nombre@ejemplo.com" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -66,7 +66,7 @@ export function LoginForm() {
               name="password"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Password</FormLabel>
+                  <FormLabel>Contraseña</FormLabel>
                   <FormControl>
                     <Input type="password" placeholder="••••••••" {...field} />
                   </FormControl>
@@ -76,14 +76,14 @@ export function LoginForm() {
             />
             <Button type="submit" className="w-full" disabled={isLoading}>
               {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-              Sign In
+              Iniciar Sesión
             </Button>
           </form>
         </Form>
         <p className="mt-4 text-center text-sm text-muted-foreground">
-          Don&apos;t have an account?{' '}
+          ¿No tienes una cuenta?{' '}
           <Link href="/signup" className="font-semibold text-primary hover:underline">
-            Sign up
+            Regístrate
           </Link>
         </p>
       </CardContent>

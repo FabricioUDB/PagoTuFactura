@@ -34,7 +34,7 @@ export default function Header() {
         <SheetTrigger asChild>
           <Button size="icon" variant="outline" className="sm:hidden">
             <Menu className="h-5 w-5" />
-            <span className="sr-only">Toggle Menu</span>
+            <span className="sr-only">Alternar Menú</span>
           </Button>
         </SheetTrigger>
         <SheetContent side="left" className="sm:max-w-xs">
@@ -44,15 +44,15 @@ export default function Header() {
               className="group flex h-10 w-10 shrink-0 items-center justify-center gap-2 rounded-full bg-primary text-lg font-semibold text-primary-foreground md:text-base"
             >
               <Home className="h-5 w-5 transition-all group-hover:scale-110" />
-              <span className="sr-only">Invoice Hub</span>
+              <span className="sr-only">Centro de Facturas</span>
             </Link>
             <Link href="/dashboard" className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground">
               <Home className="h-5 w-5" />
-              Dashboard
+              Panel
             </Link>
             <Link href="/dashboard/invoices/new" className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground">
               <PlusCircle className="h-5 w-5" />
-              New Invoice
+              Nueva Factura
             </Link>
           </nav>
         </SheetContent>
@@ -70,16 +70,16 @@ export default function Header() {
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
-          <DropdownMenuLabel>My Account</DropdownMenuLabel>
+          <DropdownMenuLabel>Mi Cuenta</DropdownMenuLabel>
           <DropdownMenuSeparator />
           <DropdownMenuItem>
             <User className="mr-2 h-4 w-4" />
-            <span>Profile</span>
+            <span>Perfil</span>
           </DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuItem onClick={handleLogout}>
             <LogOut className="mr-2 h-4 w-4" />
-            <span>Logout</span>
+            <span>Cerrar Sesión</span>
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>

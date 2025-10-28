@@ -31,7 +31,7 @@ export function SignupForm() {
     const { error } = await signUpWithEmail(values);
     if (error) {
       toast({
-        title: 'Sign Up Failed',
+        title: 'Error de Registro',
         description: error.message,
         variant: 'destructive',
       });
@@ -43,8 +43,8 @@ export function SignupForm() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Create an Account</CardTitle>
-        <CardDescription>Enter your details to get started.</CardDescription>
+        <CardTitle>Crear una Cuenta</CardTitle>
+        <CardDescription>Introduce tus datos para empezar.</CardDescription>
       </CardHeader>
       <CardContent>
         <Form {...form}>
@@ -54,9 +54,9 @@ export function SignupForm() {
               name="email"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Email</FormLabel>
+                  <FormLabel>Correo Electrónico</FormLabel>
                   <FormControl>
-                    <Input placeholder="name@example.com" {...field} />
+                    <Input placeholder="nombre@ejemplo.com" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -67,7 +67,7 @@ export function SignupForm() {
               name="password"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Password</FormLabel>
+                  <FormLabel>Contraseña</FormLabel>
                   <FormControl>
                     <Input type="password" placeholder="••••••••" {...field} />
                   </FormControl>
@@ -80,7 +80,7 @@ export function SignupForm() {
               name="confirmPassword"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Confirm Password</FormLabel>
+                  <FormLabel>Confirmar Contraseña</FormLabel>
                   <FormControl>
                     <Input type="password" placeholder="••••••••" {...field} />
                   </FormControl>
@@ -90,14 +90,14 @@ export function SignupForm() {
             />
             <Button type="submit" className="w-full" disabled={isLoading}>
               {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-              Create Account
+              Crear Cuenta
             </Button>
           </form>
         </Form>
         <p className="mt-4 text-center text-sm text-muted-foreground">
-          Already have an account?{' '}
+          ¿Ya tienes una cuenta?{' '}
           <Link href="/login" className="font-semibold text-primary hover:underline">
-            Sign in
+            Inicia sesión
           </Link>
         </p>
       </CardContent>

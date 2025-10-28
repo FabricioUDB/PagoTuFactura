@@ -1,32 +1,32 @@
 import { z } from 'zod';
 
 export const loginSchema = z.object({
-  email: z.string().email({ message: 'Please enter a valid email.' }),
-  password: z.string().min(6, { message: 'Password must be at least 6 characters.' }),
+  email: z.string().email({ message: 'Por favor, introduce un correo electrónico válido.' }),
+  password: z.string().min(6, { message: 'La contraseña debe tener al menos 6 caracteres.' }),
 });
 
 export const signupSchema = z.object({
-  email: z.string().email({ message: 'Please enter a valid email.' }),
-  password: z.string().min(6, { message: 'Password must be at least 6 characters.' }),
+  email: z.string().email({ message: 'Por favor, introduce un correo electrónico válido.' }),
+  password: z.string().min(6, { message: 'La contraseña debe tener al menos 6 caracteres.' }),
   confirmPassword: z.string(),
 }).refine(data => data.password === data.confirmPassword, {
-  message: "Passwords don't match",
+  message: "Las contraseñas no coinciden",
   path: ['confirmPassword'],
 });
 
 export const invoiceItemSchema = z.object({
-  description: z.string().min(1, 'Description is required.'),
-  quantity: z.coerce.number().min(1, 'Quantity must be at least 1.'),
-  price: z.coerce.number().min(0, 'Price cannot be negative.'),
+  description: z.string().min(1, 'La descripción es obligatoria.'),
+  quantity: z.coerce.number().min(1, 'La cantidad debe ser al menos 1.'),
+  price: z.coerce.number().min(0, 'El precio no puede ser negativo.'),
 });
 
 export const invoiceSchema = z.object({
-  customerName: z.string().min(1, 'Customer name is required.'),
-  customerEmail: z.string().email('Invalid email address.'),
-  invoiceDate: z.date({ required_error: 'Invoice date is required.' }),
-  dueDate: z.date({ required_error: 'Due date is required.' }),
+  customerName: z.string().min(1, 'El nombre del cliente es obligatorio.'),
+  customerEmail: z.string().email('Dirección de correo electrónico no válida.'),
+  invoiceDate: z.date({ required_error: 'La fecha de la factura es obligatoria.' }),
+  dueDate: z.date({ required_error: 'La fecha de vencimiento es obligatoria.' }),
   status: z.enum(['Paid', 'Pending', 'Overdue']),
-  items: z.array(invoiceItemSchema).min(1, 'At least one item is required.'),
+  items: z.array(invoiceItemSchema).min(1, 'Se requiere al menos un artículo.'),
   notes: z.string().optional(),
 });
 

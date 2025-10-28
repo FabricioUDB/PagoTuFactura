@@ -52,14 +52,14 @@ export default function InvoiceForm() {
 
   async function onSubmit(data: InvoiceFormData) {
     if (!user) {
-      toast({ title: 'Authentication Error', description: 'You must be logged in.', variant: 'destructive' });
+      toast({ title: 'Error de Autenticación', description: 'Debes iniciar sesión.', variant: 'destructive' });
       return;
     }
     setIsLoading(true);
     const result = await addInvoice(data, user.uid);
     setIsLoading(false);
     if (result.success) {
-      toast({ title: 'Success', description: 'Invoice created successfully.' });
+      toast({ title: 'Éxito', description: 'Factura creada correctamente.' });
       router.push('/dashboard');
     } else {
       toast({ title: 'Error', description: result.error, variant: 'destructive' });
@@ -71,37 +71,37 @@ export default function InvoiceForm() {
       <form onSubmit={form.handleSubmit(onSubmit)}>
         <Card>
           <CardHeader>
-            <CardTitle>Invoice Details</CardTitle>
+            <CardTitle>Detalles de la Factura</CardTitle>
           </CardHeader>
           <CardContent className="space-y-6">
             <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
               <FormField control={form.control} name="customerName" render={({ field }) => (
-                <FormItem><FormLabel>Customer Name</FormLabel><FormControl><Input placeholder="John Doe" {...field} /></FormControl><FormMessage /></FormItem>
+                <FormItem><FormLabel>Nombre del Cliente</FormLabel><FormControl><Input placeholder="John Doe" {...field} /></FormControl><FormMessage /></FormItem>
               )} />
               <FormField control={form.control} name="customerEmail" render={({ field }) => (
-                <FormItem><FormLabel>Customer Email</FormLabel><FormControl><Input placeholder="john.doe@example.com" {...field} /></FormControl><FormMessage /></FormItem>
+                <FormItem><FormLabel>Email del Cliente</FormLabel><FormControl><Input placeholder="john.doe@example.com" {...field} /></FormControl><FormMessage /></FormItem>
               )} />
               <FormField control={form.control} name="invoiceDate" render={({ field }) => (
-                <FormItem><FormLabel>Invoice Date</FormLabel><Popover><PopoverTrigger asChild><FormControl><Button variant="outline" className={cn('w-full pl-3 text-left font-normal', !field.value && 'text-muted-foreground')}><CalendarIcon className="mr-2 h-4 w-4" />{field.value ? format(field.value, 'PPP') : <span>Pick a date</span>}</Button></FormControl></PopoverTrigger><PopoverContent className="w-auto p-0" align="start"><Calendar mode="single" selected={field.value} onSelect={field.onChange} /></PopoverContent></Popover><FormMessage /></FormItem>
+                <FormItem><FormLabel>Fecha de Factura</FormLabel><Popover><PopoverTrigger asChild><FormControl><Button variant="outline" className={cn('w-full pl-3 text-left font-normal', !field.value && 'text-muted-foreground')}><CalendarIcon className="mr-2 h-4 w-4" />{field.value ? format(field.value, 'PPP') : <span>Elige una fecha</span>}</Button></FormControl></PopoverTrigger><PopoverContent className="w-auto p-0" align="start"><Calendar mode="single" selected={field.value} onSelect={field.onChange} /></PopoverContent></Popover><FormMessage /></FormItem>
               )} />
               <FormField control={form.control} name="dueDate" render={({ field }) => (
-                <FormItem><FormLabel>Due Date</FormLabel><Popover><PopoverTrigger asChild><FormControl><Button variant="outline" className={cn('w-full pl-3 text-left font-normal', !field.value && 'text-muted-foreground')}><CalendarIcon className="mr-2 h-4 w-4" />{field.value ? format(field.value, 'PPP') : <span>Pick a date</span>}</Button></FormControl></PopoverTrigger><PopoverContent className="w-auto p-0" align="start"><Calendar mode="single" selected={field.value} onSelect={field.onChange} /></PopoverContent></Popover><FormMessage /></FormItem>
+                <FormItem><FormLabel>Fecha de Vencimiento</FormLabel><Popover><PopoverTrigger asChild><FormControl><Button variant="outline" className={cn('w-full pl-3 text-left font-normal', !field.value && 'text-muted-foreground')}><CalendarIcon className="mr-2 h-4 w-4" />{field.value ? format(field.value, 'PPP') : <span>Elige una fecha</span>}</Button></FormControl></PopoverTrigger><PopoverContent className="w-auto p-0" align="start"><Calendar mode="single" selected={field.value} onSelect={field.onChange} /></PopoverContent></Popover><FormMessage /></FormItem>
               )} />
             </div>
 
             <div>
-              <h3 className="mb-4 text-lg font-medium">Items</h3>
+              <h3 className="mb-4 text-lg font-medium">Artículos</h3>
               <div className="space-y-4">
                 {fields.map((field, index) => (
                   <div key={field.id} className="grid grid-cols-12 gap-2 items-start">
                     <div className="col-span-12 sm:col-span-5">
-                      <FormField control={form.control} name={`items.${index}.description`} render={({ field }) => (<FormItem><FormLabel className={cn(index !== 0 && "sr-only")}>Description</FormLabel><FormControl><Input {...field} placeholder="Item description" /></FormControl><FormMessage /></FormItem>)} />
+                      <FormField control={form.control} name={`items.${index}.description`} render={({ field }) => (<FormItem><FormLabel className={cn(index !== 0 && "sr-only")}>Descripción</FormLabel><FormControl><Input {...field} placeholder="Descripción del artículo" /></FormControl><FormMessage /></FormItem>)} />
                     </div>
                     <div className="col-span-6 sm:col-span-2">
-                       <FormField control={form.control} name={`items.${index}.quantity`} render={({ field }) => (<FormItem><FormLabel className={cn(index !== 0 && "sr-only")}>Qty</FormLabel><FormControl><Input type="number" {...field} placeholder="1" /></FormControl><FormMessage /></FormItem>)} />
+                       <FormField control={form.control} name={`items.${index}.quantity`} render={({ field }) => (<FormItem><FormLabel className={cn(index !== 0 && "sr-only")}>Cant</FormLabel><FormControl><Input type="number" {...field} placeholder="1" /></FormControl><FormMessage /></FormItem>)} />
                     </div>
                     <div className="col-span-6 sm:col-span-2">
-                       <FormField control={form.control} name={`items.${index}.price`} render={({ field }) => (<FormItem><FormLabel className={cn(index !== 0 && "sr-only")}>Price</FormLabel><FormControl><Input type="number" step="0.01" {...field} placeholder="0.00" /></FormControl><FormMessage /></FormItem>)} />
+                       <FormField control={form.control} name={`items.${index}.price`} render={({ field }) => (<FormItem><FormLabel className={cn(index !== 0 && "sr-only")}>Precio</FormLabel><FormControl><Input type="number" step="0.01" {...field} placeholder="0.00" /></FormControl><FormMessage /></FormItem>)} />
                     </div>
                     <div className="col-span-12 sm:col-span-2">
                        <FormLabel className={cn(index !== 0 && "sr-only")}>Total</FormLabel>
@@ -116,19 +116,19 @@ export default function InvoiceForm() {
                 ))}
               </div>
               <Button type="button" variant="outline" size="sm" className="mt-4" onClick={() => append({ description: '', quantity: 1, price: 0 })}>
-                <Plus className="mr-2 h-4 w-4" /> Add Item
+                <Plus className="mr-2 h-4 w-4" /> Añadir Artículo
               </Button>
             </div>
             
             <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-                <FormField control={form.control} name="notes" render={({ field }) => (<FormItem><FormLabel>Notes</FormLabel><FormControl><Textarea placeholder="Any additional information..." {...field} /></FormControl><FormMessage /></FormItem>)} />
+                <FormField control={form.control} name="notes" render={({ field }) => (<FormItem><FormLabel>Notas</FormLabel><FormControl><Textarea placeholder="Cualquier información adicional..." {...field} /></FormControl><FormMessage /></FormItem>)} />
                 <div className="space-y-2">
                     <FormField control={form.control} name="status" render={({ field }) => (
-                      <FormItem><FormLabel>Status</FormLabel><Select onValueChange={field.onChange} defaultValue={field.value}><FormControl><SelectTrigger><SelectValue placeholder="Select status" /></SelectTrigger></FormControl><SelectContent><SelectItem value="Pending">Pending</SelectItem><SelectItem value="Paid">Paid</SelectItem><SelectItem value="Overdue">Overdue</SelectItem></SelectContent></Select><FormMessage /></FormItem>
+                      <FormItem><FormLabel>Estado</FormLabel><Select onValueChange={field.onChange} defaultValue={field.value}><FormControl><SelectTrigger><SelectValue placeholder="Seleccionar estado" /></SelectTrigger></FormControl><SelectContent><SelectItem value="Pending">Pendiente</SelectItem><SelectItem value="Paid">Pagada</SelectItem><SelectItem value="Overdue">Vencida</SelectItem></SelectContent></Select><FormMessage /></FormItem>
                     )} />
                      <div className="flex justify-end pt-4">
                         <div className="text-right">
-                            <p className="text-muted-foreground">Total Amount</p>
+                            <p className="text-muted-foreground">Importe Total</p>
                             <p className="text-2xl font-bold">${totalAmount.toFixed(2)}</p>
                         </div>
                     </div>
@@ -139,7 +139,7 @@ export default function InvoiceForm() {
           <CardFooter>
             <Button type="submit" disabled={isLoading}>
               {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-              Create Invoice
+              Crear Factura
             </Button>
           </CardFooter>
         </Card>

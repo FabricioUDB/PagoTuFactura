@@ -38,13 +38,13 @@ export default function DashboardPage() {
     <Card>
       <CardHeader className="flex flex-row items-center justify-between">
         <div>
-          <CardTitle>Invoices</CardTitle>
-          <CardDescription>Manage your invoices here.</CardDescription>
+          <CardTitle>Facturas</CardTitle>
+          <CardDescription>Gestiona tus facturas aquí.</CardDescription>
         </div>
         <Button asChild size="sm" className="gap-1">
           <Link href="/dashboard/invoices/new">
             <PlusCircle className="h-3.5 w-3.5" />
-            <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">New Invoice</span>
+            <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">Nueva Factura</span>
           </Link>
         </Button>
       </CardHeader>
@@ -52,24 +52,24 @@ export default function DashboardPage() {
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>Invoice</TableHead>
-              <TableHead>Customer</TableHead>
-              <TableHead>Status</TableHead>
-              <TableHead>Date</TableHead>
-              <TableHead className="text-right">Amount</TableHead>
+              <TableHead>Factura</TableHead>
+              <TableHead>Cliente</TableHead>
+              <TableHead>Estado</TableHead>
+              <TableHead>Fecha</TableHead>
+              <TableHead className="text-right">Importe</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {loading ? (
               <TableRow>
                 <TableCell colSpan={5} className="h-24 text-center">
-                  Loading invoices...
+                  Cargando facturas...
                 </TableCell>
               </TableRow>
             ) : invoices.length === 0 ? (
               <TableRow>
                 <TableCell colSpan={5} className="h-24 text-center">
-                  No invoices found. <Link href="/dashboard/invoices/new" className="text-primary hover:underline">Create one now</Link>!
+                  No se encontraron facturas. <Link href="/dashboard/invoices/new" className="text-primary hover:underline">Crea una ahora</Link>!
                 </TableCell>
               </TableRow>
             ) : (

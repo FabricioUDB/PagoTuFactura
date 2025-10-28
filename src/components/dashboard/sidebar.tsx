@@ -7,8 +7,8 @@ import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
 
 const navItems = [
-  { href: '/dashboard', icon: Home, label: 'Dashboard' },
-  { href: '/dashboard/invoices/new', icon: PlusCircle, label: 'New Invoice' },
+  { href: '/dashboard', icon: Home, label: 'Panel' },
+  { href: '/dashboard/invoices/new', icon: PlusCircle, label: 'Nueva Factura' },
 ];
 
 export default function Sidebar() {
@@ -23,7 +23,7 @@ export default function Sidebar() {
             className="group flex h-9 w-9 shrink-0 items-center justify-center gap-2 rounded-full bg-primary text-lg font-semibold text-primary-foreground md:h-8 md:w-8 md:text-base"
           >
             <FileText className="h-4 w-4 transition-all group-hover:scale-110" />
-            <span className="sr-only">Invoice Hub</span>
+            <span className="sr-only">Centro de Facturas</span>
           </Link>
           {navItems.map((item) => (
             <Tooltip key={item.href}>
@@ -51,10 +51,10 @@ export default function Sidebar() {
                 className="flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-foreground md:h-8 md:w-8"
               >
                 <Settings className="h-5 w-5" />
-                <span className="sr-only">Settings</span>
+                <span className="sr-only">Ajustes</span>
               </Link>
             </TooltipTrigger>
-            <TooltipContent side="right">Settings</TooltipContent>
+            <TooltipContent side="right">Ajustes</TooltipContent>
           </Tooltip>
         </nav>
       </TooltipProvider>

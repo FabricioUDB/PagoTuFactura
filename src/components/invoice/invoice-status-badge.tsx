@@ -7,6 +7,12 @@ interface InvoiceStatusBadgeProps {
   className?: string;
 }
 
+const statusTranslations: Record<InvoiceStatus, string> = {
+  Paid: 'Pagada',
+  Pending: 'Pendiente',
+  Overdue: 'Vencida',
+};
+
 export default function InvoiceStatusBadge({ status, className }: InvoiceStatusBadgeProps) {
   const statusStyles: Record<InvoiceStatus, string> = {
     Paid: 'bg-green-100 text-green-800 dark:bg-green-900/50 dark:text-green-300 border-green-200 dark:border-green-700/50',
@@ -19,7 +25,7 @@ export default function InvoiceStatusBadge({ status, className }: InvoiceStatusB
       variant="outline"
       className={cn('capitalize', statusStyles[status], className)}
     >
-      {status}
+      {statusTranslations[status]}
     </Badge>
   );
 }

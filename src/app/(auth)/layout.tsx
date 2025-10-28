@@ -12,7 +12,7 @@ export default function AuthLayout({
             <div className="mb-8 flex justify-center">
                 <div className="flex items-center gap-2">
                     <FileText className="h-8 w-8 text-primary" />
-                    <h1 className="text-2xl font-bold text-foreground">Invoice Hub</h1>
+                    <h1 className="text-2xl font-bold text-foreground">Centro de Facturas</h1>
                 </div>
             </div>
             {children}

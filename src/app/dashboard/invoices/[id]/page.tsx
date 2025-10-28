@@ -60,7 +60,7 @@ export default function InvoiceDetailPage() {
     const result = await deleteInvoice(invoice.id);
     setDeleting(false);
     if (result.success) {
-      toast({ title: "Success", description: "Invoice deleted."});
+      toast({ title: "Éxito", description: "Factura eliminada."});
       router.push('/dashboard');
     } else {
       toast({ title: "Error", description: result.error, variant: 'destructive'});
@@ -72,14 +72,14 @@ export default function InvoiceDetailPage() {
   }
 
   if (!invoice) {
-    return <div className="text-center py-10">Invoice not found.</div>;
+    return <div className="text-center py-10">Factura no encontrada.</div>;
   }
 
   return (
     <div className="space-y-6">
        <div className="flex items-center justify-between">
             <Button variant="outline" onClick={() => router.back()}>
-                <ArrowLeft className="mr-2 h-4 w-4" /> Back to Invoices
+                <ArrowLeft className="mr-2 h-4 w-4" /> Volver a Facturas
             </Button>
             <div className="flex gap-2">
                 <CompliantInvoiceDialog invoice={invoice} />
@@ -91,14 +91,14 @@ export default function InvoiceDetailPage() {
                   </AlertDialogTrigger>
                   <AlertDialogContent>
                     <AlertDialogHeader>
-                      <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+                      <AlertDialogTitle>¿Estás seguro?</AlertDialogTitle>
                       <AlertDialogDescription>
-                        This action cannot be undone. This will permanently delete this invoice.
+                        Esta acción no se puede deshacer. Esto eliminará permanentemente esta factura.
                       </AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter>
-                      <AlertDialogCancel>Cancel</AlertDialogCancel>
-                      <AlertDialogAction onClick={handleDelete}>Delete</AlertDialogAction>
+                      <AlertDialogCancel>Cancelar</AlertDialogCancel>
+                      <AlertDialogAction onClick={handleDelete}>Eliminar</AlertDialogAction>
                     </AlertDialogFooter>
                   </AlertDialogContent>
                 </AlertDialog>
@@ -108,20 +108,20 @@ export default function InvoiceDetailPage() {
         <CardHeader>
           <div className="flex justify-between items-start">
             <div>
-              <CardTitle className="text-2xl">Invoice {invoice.invoiceNumber}</CardTitle>
+              <CardTitle className="text-2xl">Factura {invoice.invoiceNumber}</CardTitle>
               <CardDescription>
-                To: {invoice.customerName} ({invoice.customerEmail})
+                Para: {invoice.customerName} ({invoice.customerEmail})
               </CardDescription>
             </div>
             <InvoiceStatusBadge status={invoice.status} className="text-base px-4 py-1" />
           </div>
           <div className="flex space-x-8 text-sm text-muted-foreground pt-4">
             <div>
-              <p className="font-semibold text-foreground">Invoice Date</p>
+              <p className="font-semibold text-foreground">Fecha de Factura</p>
               <p>{format(invoice.invoiceDate.toDate(), 'PPP')}</p>
             </div>
             <div>
-              <p className="font-semibold text-foreground">Due Date</p>
+              <p className="font-semibold text-foreground">Fecha de Vencimiento</p>
               <p>{format(invoice.dueDate.toDate(), 'PPP')}</p>
             </div>
           </div>
@@ -130,9 +130,9 @@ export default function InvoiceDetailPage() {
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Description</TableHead>
-                <TableHead className="text-center">Quantity</TableHead>
-                <TableHead className="text-right">Unit Price</TableHead>
+                <TableHead>Descripción</TableHead>
+                <TableHead className="text-center">Cantidad</TableHead>
+                <TableHead className="text-right">Precio Unitario</TableHead>
                 <TableHead className="text-right">Total</TableHead>
               </TableRow>
             </TableHeader>
@@ -163,7 +163,7 @@ export default function InvoiceDetailPage() {
 
           {invoice.notes && (
             <div className="mt-6">
-                <h4 className="font-semibold">Notes</h4>
+                <h4 className="font-semibold">Notas</h4>
                 <p className="text-sm text-muted-foreground">{invoice.notes}</p>
             </div>
           )}
