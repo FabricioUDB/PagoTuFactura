@@ -1,0 +1,193 @@
+{
+  "entities": {
+    "User": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "User",
+      "type": "object",
+      "description": "Represents a user within the Invoice Hub application.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the user entity."
+        },
+        "email": {
+          "type": "string",
+          "description": "User's email address.",
+          "format": "email"
+        },
+        "name": {
+          "type": "string",
+          "description": "The full name of the user."
+        }
+      },
+      "required": [
+        "id",
+        "email",
+        "name"
+      ]
+    },
+    "Invoice": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Invoice",
+      "type": "object",
+      "description": "Represents an invoice in the system.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the invoice."
+        },
+        "userId": {
+          "type": "string",
+          "description": "Reference to the User who created the invoice. (Relationship: User 1:N Invoice)"
+        },
+        "invoiceNumber": {
+          "type": "string",
+          "description": "Unique number assigned to the invoice."
+        },
+        "customerName": {
+          "type": "string",
+          "description": "Name of the customer the invoice is issued to."
+        },
+        "issueDate": {
+          "type": "string",
+          "description": "Date when the invoice was issued.",
+          "format": "date-time"
+        },
+        "dueDate": {
+          "type": "string",
+          "description": "Date when the invoice is due.",
+          "format": "date-time"
+        },
+        "totalAmount": {
+          "type": "number",
+          "description": "Total amount due on the invoice."
+        },
+        "status": {
+          "type": "string",
+          "description": "Current status of the invoice (e.g., 'Draft', 'Sent', 'Paid', 'Overdue')."
+        }
+      },
+      "required": [
+        "id",
+        "userId",
+        "invoiceNumber",
+        "customerName",
+        "issueDate",
+        "dueDate",
+        "totalAmount",
+        "status"
+      ]
+    },
+    "InvoiceItem": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "InvoiceItem",
+      "type": "object",
+      "description": "Represents a single item within an invoice.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the invoice item."
+        },
+        "invoiceId": {
+          "type": "string",
+          "description": "Reference to the Invoice this item belongs to. (Relationship: Invoice 1:N InvoiceItem)"
+        },
+        "description": {
+          "type": "string",
+          "description": "Description of the item."
+        },
+        "quantity": {
+          "type": "number",
+          "description": "Quantity of the item."
+        },
+        "unitPrice": {
+          "type": "number",
+          "description": "Price per unit of the item."
+        },
+        "amount": {
+          "type": "number",
+          "description": "Total amount for this item (quantity * unitPrice)."
+        }
+      },
+      "required": [
+        "id",
+        "invoiceId",
+        "description",
+        "quantity",
+        "unitPrice",
+        "amount"
+      ]
+    }
+  },
+  "auth": {
+    "providers": [
+      "password",
+      "anonymous"
+    ]
+  },
+  "firestore": {
+    "structure": [
+      {
+        "path": "/users/{userId}",
+        "definition": {
+          "entityName": "User",
+          "schema": {
+            "$ref": "#/backend/entities/User"
+          },
+          "description": "Stores user profiles. Path-based ownership ensures only the authenticated user can access their own profile.",
+          "params": [
+            {
+              "name": "userId",
+              "description": "The unique identifier of the user, matching the Firebase Auth UID."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/users/{userId}/invoices/{invoiceId}",
+        "definition": {
+          "entityName": "Invoice",
+          "schema": {
+            "$ref": "#/backend/entities/Invoice"
+          },
+          "description": "Stores invoices created by the user. Path-based ownership: only the user can access invoices under their userId.",
+          "params": [
+            {
+              "name": "userId",
+              "description": "The unique identifier of the user who owns the invoice."
+            },
+            {
+              "name": "invoiceId",
+              "description": "The unique identifier of the invoice."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/users/{userId}/invoices/{invoiceId}/items/{itemId}",
+        "definition": {
+          "entityName": "InvoiceItem",
+          "schema": {
+            "$ref": "#/backend/entities/InvoiceItem"
+          },
+          "description": "Stores invoice items associated with a specific invoice. Path-based ownership ensures only the user can access items within their invoices.",
+          "params": [
+            {
+              "name": "userId",
+              "description": "The unique identifier of the user who owns the invoice item."
+            },
+            {
+              "name": "invoiceId",
+              "description": "The unique identifier of the parent invoice."
+            },
+            {
+              "name": "itemId",
+              "description": "The unique identifier of the invoice item."
+            }
+          ]
+        }
+      }
+    ],
+    "reasoning": "The Firestore structure is designed to ensure security, scalability, and debuggability, adhering to the principles of Authorization Independence, Clarity of Intent, DBAC, and QAPs.  It avoids `get()` calls in security rules by denormalizing authorization data where necessary.  The structure uses path-based ownership for user-related data and membership maps where collaboration is needed. Specifically, Invoices and InvoiceItems are structured under users to leverage path-based security rules, ensuring only the user can access their own invoices. This eliminates the need for complex `get()` calls to verify ownership.\n\n**Authorization Independence:** The Invoice and InvoiceItem subcollections under `/users/{userId}` achieve authorization independence because access control is implicitly tied to the `userId` in the path.  No `get()` calls are needed to authorize access, as the rule simply checks that `request.auth.uid == userId`.\n\n**QAPs:** Secure `list` operations are enabled by using hierarchical paths. Listing invoices or invoice items can be securely achieved by querying the specific user's subcollections, ensuring that only the user's data is returned. The structural segregation means the rules do not have to filter data based on attributes.\n\n**Debugging**: The simplicity of the structure makes debugging easier, the structure is made explicit, invariant and predictable."
+  }
+}
