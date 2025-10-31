@@ -13,7 +13,7 @@ import {
   deleteDoc,
   orderBy,
 } from 'firebase/firestore';
-import { db } from './config';
+import { db } from '@/lib/firebase/config';
 import type { Invoice, InvoiceFormData } from '@/lib/types';
 import { errorEmitter } from '@/firebase/error-emitter';
 import { FirestorePermissionError } from '@/firebase/errors';
