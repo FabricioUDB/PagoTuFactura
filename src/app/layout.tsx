@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import './globals.css';
 import { Toaster } from '@/components/ui/toaster';
 import Header from '@/components/layout/header';
+import { FirebaseClientProvider } from '@/firebase';
 
 export const metadata: Metadata = {
   title: 'Pago de Recibo de Agua',
@@ -28,9 +29,11 @@ export default function RootLayout({
         />
       </head>
       <body className="font-body antialiased">
-        <Header />
-        <main>{children}</main>
-        <Toaster />
+        <FirebaseClientProvider>
+          <Header />
+          <main>{children}</main>
+          <Toaster />
+        </FirebaseClientProvider>
       </body>
     </html>
   );
