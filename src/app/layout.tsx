@@ -1,11 +1,10 @@
 import type { Metadata } from 'next';
 import './globals.css';
-import { AuthProvider } from '@/lib/auth-provider';
 import { Toaster } from '@/components/ui/toaster';
 
 export const metadata: Metadata = {
-  title: 'Centro de Facturas',
-  description: 'Crea y gestiona tus facturas con facilidad.',
+  title: 'Pago de Recibo de Agua',
+  description: 'Paga tu recibo de agua de forma rápida y segura.',
 };
 
 export default function RootLayout({
@@ -28,7 +27,7 @@ export default function RootLayout({
         />
       </head>
       <body className="font-body antialiased">
-        <AuthProvider>{children}</AuthProvider>
+        {children}
         <Toaster />
       </body>
     </html>
