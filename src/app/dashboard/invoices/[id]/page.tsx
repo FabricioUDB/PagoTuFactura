@@ -55,9 +55,9 @@ export default function InvoiceDetailPage() {
   }, [user, id, router]);
   
   const handleDelete = async () => {
-    if (!invoice) return;
+    if (!invoice || !user) return;
     setDeleting(true);
-    const result = await deleteInvoice(invoice.id);
+    const result = await deleteInvoice(invoice.id, user.uid);
     setDeleting(false);
     if (result.success) {
       toast({ title: "Éxito", description: "Factura eliminada."});

@@ -5,48 +5,53 @@ import {
   addDoc,
   getDocs,
   query,
-  where,
   doc,
   getDoc,
   Timestamp,
   updateDoc,
   deleteDoc,
   orderBy,
+  collectionGroup,
+  where,
 } from 'firebase/firestore';
 import { db } from '@/lib/firebase/config';
 import type { Invoice, InvoiceFormData } from '@/lib/types';
 import { errorEmitter } from '@/firebase/error-emitter';
 import { FirestorePermissionError } from '@/firebase/errors';
 
+function getInvoicesCollection(userId: string) {
+    return collection(db, 'users', userId, 'invoices');
+}
 
-const INVOICES_COLLECTION = 'invoices';
+function getInvoiceDoc(userId: string, invoiceId: string) {
+    return doc(db, 'users', userId, 'invoices', invoiceId);
+}
 
 export async function addInvoice(invoiceData: InvoiceFormData, userId: string) {
   try {
-    // Generate a unique invoice number
     const now = new Date();
     const invoiceNumber = `INV-${now.getFullYear()}${(now.getMonth() + 1).toString().padStart(2, '0')}${now.getDate().toString().padStart(2, '0')}-${Date.now().toString().slice(-4)}`;
 
     const dataToSave = {
-        ...invoiceData,
-        invoiceNumber,
-        userId,
-        invoiceDate: Timestamp.fromDate(invoiceData.invoiceDate),
-        dueDate: Timestamp.fromDate(invoiceData.dueDate),
-        totalAmount: invoiceData.items.reduce((acc, item) => acc + item.quantity * item.price, 0),
+      ...invoiceData,
+      invoiceNumber,
+      userId,
+      invoiceDate: Timestamp.fromDate(invoiceData.invoiceDate),
+      dueDate: Timestamp.fromDate(invoiceData.dueDate),
+      totalAmount: invoiceData.items.reduce((acc, item) => acc + item.quantity * item.price, 0),
     };
 
-    addDoc(collection(db, INVOICES_COLLECTION), dataToSave)
-        .catch(error => {
-            errorEmitter.emit(
-                'permission-error',
-                new FirestorePermissionError({
-                    path: INVOICES_COLLECTION,
-                    operation: 'create',
-                    requestResourceData: dataToSave,
-                })
-            )
-        });
+    const invoicesCollection = getInvoicesCollection(userId);
+    addDoc(invoicesCollection, dataToSave).catch(error => {
+      errorEmitter.emit(
+        'permission-error',
+        new FirestorePermissionError({
+          path: invoicesCollection.path,
+          operation: 'create',
+          requestResourceData: dataToSave,
+        })
+      );
+    });
 
     return { success: true, error: null };
   } catch (error) {
@@ -55,9 +60,9 @@ export async function addInvoice(invoiceData: InvoiceFormData, userId: string) {
 }
 
 export async function getInvoices(userId: string): Promise<Invoice[]> {
+  const invoicesCollection = getInvoicesCollection(userId);
   const q = query(
-    collection(db, INVOICES_COLLECTION),
-    where('userId', '==', userId),
+    invoicesCollection,
     orderBy('invoiceDate', 'desc')
   );
 
@@ -69,38 +74,24 @@ export async function getInvoices(userId: string): Promise<Invoice[]> {
     })) as Invoice[];
   } catch (error) {
     errorEmitter.emit(
-        'permission-error',
-        new FirestorePermissionError({
-            path: INVOICES_COLLECTION,
-            operation: 'list',
-        })
+      'permission-error',
+      new FirestorePermissionError({
+        path: invoicesCollection.path,
+        operation: 'list',
+      })
     );
-    // Return empty array on error to prevent crashes
     return [];
   }
 }
 
 export async function getInvoiceById(invoiceId: string, userId: string): Promise<Invoice | null> {
-    const docRef = doc(db, INVOICES_COLLECTION, invoiceId);
+    const docRef = getInvoiceDoc(userId, invoiceId);
     try {
         const docSnap = await getDoc(docRef);
 
-        if (docSnap.exists() && docSnap.data().userId === userId) {
+        if (docSnap.exists()) {
             return { id: docSnap.id, ...docSnap.data() } as Invoice;
         } else {
-            // If the doc doesn't exist, it's not a permission error.
-            // If it exists but userId doesn't match, it's an application-level concern,
-            // but a permission error would have already been thrown by rules if set up correctly.
-            // If rules are loose, we still might get here.
-            if (docSnap.exists() && docSnap.data().userId !== userId) {
-                 errorEmitter.emit(
-                    'permission-error',
-                    new FirestorePermissionError({
-                        path: docRef.path,
-                        operation: 'get',
-                    })
-                );
-            }
             return null;
         }
     } catch (error) {
@@ -115,8 +106,8 @@ export async function getInvoiceById(invoiceId: string, userId: string): Promise
     }
 }
 
-export async function updateInvoiceStatus(invoiceId: string, status: Invoice['status']) {
-    const docRef = doc(db, INVOICES_COLLECTION, invoiceId);
+export async function updateInvoiceStatus(invoiceId: string, userId: string, status: Invoice['status']) {
+    const docRef = getInvoiceDoc(userId, invoiceId);
     try {
         await updateDoc(docRef, { status });
         return { success: true, error: null };
@@ -133,8 +124,8 @@ export async function updateInvoiceStatus(invoiceId: string, status: Invoice['st
     }
 }
 
-export async function deleteInvoice(invoiceId: string) {
-    const docRef = doc(db, INVOICES_COLLECTION, invoiceId);
+export async function deleteInvoice(invoiceId: string, userId: string) {
+    const docRef = getInvoiceDoc(userId, invoiceId);
     try {
         await deleteDoc(docRef);
         return { success: true, error: null };
