@@ -3,13 +3,13 @@
 import { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { useAuth } from '@/lib/auth-provider';
-import { getInvoiceById, deleteInvoice } from '@/firebase/firestore-functions';
-import type { Invoice } from '@/lib/types';
+import { getInvoiceById, deleteInvoice, updateInvoiceStatus } from '@/firebase/firestore-functions';
+import type { Invoice, InvoiceStatus } from '@/lib/types';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft, Loader2, Trash2 } from 'lucide-react';
+import { ArrowLeft, Loader2, Trash2, CreditCard } from 'lucide-react';
 import InvoiceStatusBadge from '@/components/invoice/invoice-status-badge';
 import { format } from 'date-fns';
 import { CompliantInvoiceDialog } from '@/components/invoice/compliant-invoice-dialog';
@@ -35,6 +35,7 @@ export default function InvoiceDetailPage() {
   const [invoice, setInvoice] = useState<Invoice | null>(null);
   const [loading, setLoading] = useState(true);
   const [deleting, setDeleting] = useState(false);
+  const [isPaying, setIsPaying] = useState(false);
 
   useEffect(() => {
     if (user && id) {
@@ -67,6 +68,19 @@ export default function InvoiceDetailPage() {
     }
   }
 
+  const handleMarkAsPaid = async () => {
+    if (!invoice || !user) return;
+    setIsPaying(true);
+    const result = await updateInvoiceStatus(invoice.id, user.uid, 'Paid');
+    setIsPaying(false);
+    if (result.success) {
+      setInvoice(prev => prev ? { ...prev, status: 'Paid' } : null);
+      toast({ title: "Éxito", description: "La factura ha sido marcada como pagada." });
+    } else {
+      toast({ title: "Error", description: result.error, variant: "destructive" });
+    }
+  };
+
   if (loading) {
     return <div className="flex justify-center items-center h-64"><Loader2 className="h-8 w-8 animate-spin text-primary" /></div>;
   }
@@ -82,6 +96,12 @@ export default function InvoiceDetailPage() {
                 <ArrowLeft className="mr-2 h-4 w-4" /> Volver a Facturas
             </Button>
             <div className="flex gap-2">
+                {invoice.status !== 'Paid' && (
+                    <Button onClick={handleMarkAsPaid} disabled={isPaying}>
+                        {isPaying ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <CreditCard className="mr-2 h-4 w-4" />}
+                        Marcar como Pagada
+                    </Button>
+                )}
                 <CompliantInvoiceDialog invoice={invoice} />
                 <AlertDialog>
                   <AlertDialogTrigger asChild>
