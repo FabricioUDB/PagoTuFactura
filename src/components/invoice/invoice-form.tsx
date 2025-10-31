@@ -4,7 +4,7 @@ import { useFieldArray, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { invoiceSchema, type InvoiceFormData } from '@/lib/schemas';
 import { useAuth } from '@/lib/auth-provider';
-import { addInvoice } from '@/lib/firebase/firestore';
+import { addInvoice } from '@/firebase/firestore-functions';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';

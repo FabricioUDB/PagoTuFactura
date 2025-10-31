@@ -8,7 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { useAuth } from '@/lib/auth-provider';
-import { getInvoices } from '@/lib/firebase/firestore';
+import { getInvoices } from '@/firebase/firestore-functions';
 import type { Invoice } from '@/lib/types';
 import InvoiceStatusBadge from '@/components/invoice/invoice-status-badge';
 import { format } from 'date-fns';

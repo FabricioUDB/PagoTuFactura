@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { useAuth } from '@/lib/auth-provider';
-import { getInvoiceById, deleteInvoice } from '@/lib/firebase/firestore';
+import { getInvoiceById, deleteInvoice } from '@/firebase/firestore-functions';
 import type { Invoice } from '@/lib/types';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
