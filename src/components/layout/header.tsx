@@ -1,6 +1,6 @@
 'use client';
 
-import { Droplet, LogOut } from 'lucide-react';
+import { Droplet, LogIn, LogOut } from 'lucide-react';
 import Link from 'next/link';
 import { useUser } from '@/firebase';
 import { Button } from '@/components/ui/button';
@@ -23,15 +23,23 @@ export default function Header() {
         <span className="ml-2 text-lg font-semibold">Agua Pura</span>
       </Link>
       <div className="ml-auto flex items-center gap-4">
-        {!isUserLoading && user && (
-          <>
-            <span>{user.displayName || user.email}</span>
-            <Button variant="outline" size="sm" onClick={handleLogout}>
-              <LogOut className="mr-2 h-4 w-4" />
-              Salir
+        {!isUserLoading &&
+          (user ? (
+            <>
+              <span>{user.displayName || user.email}</span>
+              <Button variant="outline" size="sm" onClick={handleLogout}>
+                <LogOut className="mr-2 h-4 w-4" />
+                Salir
+              </Button>
+            </>
+          ) : (
+            <Button asChild variant="outline" size="sm">
+              <Link href="/login">
+                <LogIn className="mr-2 h-4 w-4" />
+                Login
+              </Link>
             </Button>
-          </>
-        )}
+          ))}
       </div>
     </header>
   );
