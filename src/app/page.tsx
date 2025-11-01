@@ -8,6 +8,8 @@ import Link from 'next/link';
 
 export default function Home() {
   const blogPosts = PlaceHolderImages.filter((img) => img.id.startsWith('blog-'));
+  const heroImage = PlaceHolderImages.find((img) => img.id === 'hero-water-payment');
+
   return (
     <div className="flex min-h-screen flex-col bg-background">
       <section className="w-full py-12 md:py-24 lg:py-32 xl:py-48 bg-primary/10">
@@ -28,14 +30,16 @@ export default function Home() {
                 </Link>
               </div>
             </div>
-            <Image
-              src="https://picsum.photos/seed/water-payment/600/400"
-              width={600}
-              height={400}
-              alt="Hero"
-              data-ai-hint="water drops"
-              className="mx-auto aspect-video overflow-hidden rounded-xl object-cover sm:w-full lg:order-last"
-            />
+            {heroImage && (
+              <Image
+                src={heroImage.imageUrl}
+                width={600}
+                height={400}
+                alt={heroImage.description}
+                data-ai-hint={heroImage.imageHint}
+                className="mx-auto aspect-video overflow-hidden rounded-xl object-cover sm:w-full lg:order-last"
+              />
+            )}
           </div>
         </div>
       </section>
