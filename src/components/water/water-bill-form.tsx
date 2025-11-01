@@ -14,7 +14,7 @@ import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Loader2 } from 'lucide-react';
 import { PaymentDialog } from './payment-dialog';
-import { useToast } from '@/hooks/use-toast';
+import { PaymentSuccess } from './payment-success';
 
 const waterBillSchema = z.object({
   accountNumber: z.string().regex(/^\d{4}$/, 'Debe ser un número de 4 dígitos.'),
@@ -23,7 +23,8 @@ const waterBillSchema = z.object({
 
 type WaterBillFormData = z.infer<typeof waterBillSchema>;
 
-interface BillDetails {
+export interface BillDetails {
+  accountNumber: string;
   amount: number;
   dueDate: Date;
   period: string;
@@ -44,7 +45,7 @@ export default function WaterBillForm() {
   const [loading, setLoading] = useState(false);
   const [bill, setBill] = useState<BillDetails | null>(null);
   const [isPaymentDialogOpen, setPaymentDialogOpen] = useState(false);
-  const { toast } = useToast();
+  const [paymentSuccess, setPaymentSuccess] = useState(false);
 
   const form = useForm<WaterBillFormData>({
     resolver: zodResolver(waterBillSchema),
@@ -57,6 +58,7 @@ export default function WaterBillForm() {
   const onSubmit = (data: WaterBillFormData) => {
     setLoading(true);
     setBill(null);
+    setPaymentSuccess(false);
 
     // Simulate API call
     setTimeout(() => {
@@ -64,6 +66,7 @@ export default function WaterBillForm() {
       const periodDate = new Date(year, month - 1);
       
       const newBill: BillDetails = {
+        accountNumber: data.accountNumber,
         amount: WATER_RATE_PER_M3 * WATER_CONSUMPTION_M3,
         dueDate: addDays(endOfMonth(periodDate), 5),
         period: format(periodDate, 'MMMM yyyy', { locale: es }),
@@ -74,13 +77,14 @@ export default function WaterBillForm() {
   };
 
   const handlePaymentSuccess = () => {
-    toast({
-        title: "Pago Exitoso",
-        description: `El pago de ${bill?.amount.toFixed(2)} ha sido procesado.`,
-    });
+    setPaymentSuccess(true);
     setPaymentDialogOpen(false);
     setBill(null);
     form.reset();
+  }
+
+  if (paymentSuccess) {
+    return <PaymentSuccess amount={WATER_RATE_PER_M3 * WATER_CONSUMPTION_M3} onReset={() => setPaymentSuccess(false)} />;
   }
 
   return (
