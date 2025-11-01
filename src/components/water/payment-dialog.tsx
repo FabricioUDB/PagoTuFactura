@@ -31,7 +31,7 @@ interface PaymentDialogProps {
   isOpen: boolean;
   onOpenChange: (open: boolean) => void;
   amount: number;
-  onPaymentSuccess: () => void;
+  onPaymentSuccess: (cardHolder: string, cardNumber: string) => void;
 }
 
 export function PaymentDialog({ isOpen, onOpenChange, amount, onPaymentSuccess }: PaymentDialogProps) {
@@ -53,7 +53,7 @@ export function PaymentDialog({ isOpen, onOpenChange, amount, onPaymentSuccess }
     // Simulate payment processing
     setTimeout(() => {
       setLoading(false);
-      onPaymentSuccess();
+      onPaymentSuccess(data.cardHolder, data.cardNumber);
       form.reset();
     }, 2000);
   };

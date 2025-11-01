@@ -30,6 +30,11 @@ export interface BillDetails {
   period: string;
 }
 
+export interface PaymentDetails extends BillDetails {
+    cardHolder: string;
+    cardNumber: string;
+}
+
 const months = Array.from({ length: 12 }, (_, i) => {
     const date = subMonths(new Date(), i);
     return {
@@ -45,7 +50,7 @@ export default function WaterBillForm() {
   const [loading, setLoading] = useState(false);
   const [bill, setBill] = useState<BillDetails | null>(null);
   const [isPaymentDialogOpen, setPaymentDialogOpen] = useState(false);
-  const [paymentSuccess, setPaymentSuccess] = useState(false);
+  const [paymentDetails, setPaymentDetails] = useState<PaymentDetails | null>(null);
 
   const form = useForm<WaterBillFormData>({
     resolver: zodResolver(waterBillSchema),
@@ -58,7 +63,7 @@ export default function WaterBillForm() {
   const onSubmit = (data: WaterBillFormData) => {
     setLoading(true);
     setBill(null);
-    setPaymentSuccess(false);
+    setPaymentDetails(null);
 
     // Simulate API call
     setTimeout(() => {
@@ -76,15 +81,26 @@ export default function WaterBillForm() {
     }, 1000);
   };
 
-  const handlePaymentSuccess = () => {
-    setPaymentSuccess(true);
+  const handlePaymentSuccess = (cardHolder: string, cardNumber: string) => {
+    if (!bill) return;
+    setPaymentDetails({
+        ...bill,
+        cardHolder,
+        cardNumber,
+    });
     setPaymentDialogOpen(false);
     setBill(null);
     form.reset();
   }
 
-  if (paymentSuccess) {
-    return <PaymentSuccess amount={WATER_RATE_PER_M3 * WATER_CONSUMPTION_M3} onReset={() => setPaymentSuccess(false)} />;
+  const handleReset = () => {
+    setPaymentDetails(null);
+    setBill(null);
+    form.reset();
+  }
+
+  if (paymentDetails) {
+    return <PaymentSuccess billDetails={paymentDetails} cardHolder={paymentDetails.cardHolder} cardNumber={paymentDetails.cardNumber} onReset={handleReset} />;
   }
 
   return (
