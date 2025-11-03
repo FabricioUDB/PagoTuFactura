@@ -1,15 +1,28 @@
 'use client';
 
-import { Droplet, LogIn, LogOut } from 'lucide-react';
+import { Droplet, LogIn, LogOut, ShieldCheck } from 'lucide-react';
 import Link from 'next/link';
 import { useUser } from '@/firebase';
 import { Button } from '@/components/ui/button';
 import { logout } from '@/lib/firebase/auth';
 import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
 
 export default function Header() {
   const { user, isUserLoading } = useUser();
   const router = useRouter();
+  const [isAccountant, setIsAccountant] = useState(false);
+
+  useEffect(() => {
+    if (user) {
+      user.getIdTokenResult().then((idTokenResult) => {
+        const claims = idTokenResult.claims;
+        setIsAccountant(claims.role === 'accountant');
+      });
+    } else {
+      setIsAccountant(false);
+    }
+  }, [user]);
 
   const handleLogout = async () => {
     await logout();
@@ -26,6 +39,14 @@ export default function Header() {
         {!isUserLoading &&
           (user ? (
             <>
+              {isAccountant && (
+                <Button asChild variant="ghost" size="sm">
+                    <Link href="/accountant">
+                        <ShieldCheck className="mr-2 h-4 w-4" />
+                        Accountant
+                    </Link>
+                </Button>
+              )}
               <span>{user.displayName || user.email}</span>
               <Button variant="outline" size="sm" onClick={handleLogout}>
                 <LogOut className="mr-2 h-4 w-4" />

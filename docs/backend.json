@@ -123,7 +123,16 @@
     "providers": [
       "password",
       "anonymous"
-    ]
+    ],
+    "customClaims": {
+      "role": {
+        "type": "string",
+        "enum": [
+          "accountant"
+        ],
+        "description": "A user's role in the system. 'accountant' role has elevated read privileges."
+      }
+    }
   },
   "firestore": {
     "structure": [
