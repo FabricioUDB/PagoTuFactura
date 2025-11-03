@@ -7,7 +7,7 @@ export default function PaymentPage() {
   return (
     <div className="relative flex min-h-[calc(100vh-56px)] flex-col items-center justify-center p-4 sm:p-6 md:p-8">
       <Image
-        src="https://images.unsplash.com/photo-1589389846663-18548a43a088?q=80&w=2070&auto=format&fit=crop"
+        src="https://images.unsplash.com/photo-1542482813-592997415442?q=80&w=2070&auto=format&fit=crop"
         alt="Water background"
         fill
         className="object-cover -z-10 opacity-30"
