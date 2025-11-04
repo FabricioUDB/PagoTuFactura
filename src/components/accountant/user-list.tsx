@@ -1,6 +1,6 @@
 'use client';
 
-import { useCollection, useFirestore, useMemoFirebase } from '@/firebase';
+import { useCollection, useFirestore, useMemoFirebase, useUser } from '@/firebase';
 import { collection, query } from 'firebase/firestore';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -15,11 +15,13 @@ interface User {
 
 export default function UserList() {
   const firestore = useFirestore();
+  const { user } = useUser(); // Get user for auth check
 
   const usersQuery = useMemoFirebase(() => {
-    if (!firestore) return null;
+    // Only create the query if both firestore and a user are available
+    if (!firestore || !user) return null;
     return query(collection(firestore, 'users'));
-  }, [firestore]);
+  }, [firestore, user]);
 
   const { data: users, isLoading, error } = useCollection<User>(usersQuery);
 
