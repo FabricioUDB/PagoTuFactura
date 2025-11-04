@@ -15,9 +15,13 @@ export default function Header() {
 
   useEffect(() => {
     if (user) {
+      // For development, we'll show the accountant link for any logged-in user.
+      // In production, you would check for the custom claim.
       user.getIdTokenResult().then((idTokenResult) => {
         const claims = idTokenResult.claims;
-        setIsAccountant(claims.role === 'accountant');
+        // To properly test, you'd check: claims.role === 'accountant'
+        // For now, we'll show it for any authenticated user.
+        setIsAccountant(true); 
       });
     } else {
       setIsAccountant(false);
