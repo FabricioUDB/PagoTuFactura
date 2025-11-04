@@ -34,29 +34,18 @@ service cloud.firestore {
       return request.auth != null;
     }
 
-    /**
-     * @description Protects the user profile. Only the authenticated user can write their own profile.
-     * Accountants can read any profile. For development, any authenticated user can list users.
-     * @path /users/{userId}
-     * @allow (create, update, delete) - Authenticated user can C/U/D their profile if the userId matches their auth.uid.
-     * @allow (get) - Authenticated user can read their profile, or an accountant can read any profile.
-     * @allow (list) - Any authenticated user can list all users (for development).
-     */
     match /users/{userId} {
       allow get: if isOwner(userId) || isAccountant();
-      // DEV-ONLY: Allow any signed-in user to list users. In production, this should be isAccountant().
-      allow list: if isSignedIn();
       allow create: if isOwner(userId) && request.resource.data.id == userId;
       allow update: if isOwner(userId) && request.resource.data.id == resource.data.id; //Enforce immutability of user ID
       allow delete: if isOwner(userId);
     }
+    
+    // DEV-ONLY: Allow any signed-in user to list users. In production, this should be isAccountant().
+    match /users/{userId} {
+        allow list: if isSignedIn();
+    }
 
-    /**
-     * @description Protects invoices. Only the user can write invoices. Accountants can read any invoice.
-     * @path /users/{userId}/invoices/{invoiceId}
-     * @allow (create, update, delete) - Authenticated user can write an invoice under their userId.
-     * @allow (get, list) - The owner or an accountant can read invoices.
-     */
     match /users/{userId}/invoices/{invoiceId} {
       allow get, list: if isOwner(userId) || isAccountant();
       allow create: if isOwner(userId) && request.resource.data.userId == userId;
@@ -64,12 +53,6 @@ service cloud.firestore {
       allow delete: if isOwner(userId);
     }
 
-    /**
-     * @description Protects invoice items. Only the user can write items. Accountants can read any item.
-     * @path /users/{userId}/invoices/{invoiceId}/items/{itemId}
-     * @allow (create, update, delete) - Authenticated user can write an invoice item under their userId and invoiceId.
-     * @allow (get, list) - The owner or an accountant can read invoice items.
-     */
     match /users/{userId}/invoices/{invoiceId}/items/{itemId} {
       allow get, list: if isOwner(userId) || isAccountant();
       allow create, update, delete: if isOwner(userId);
