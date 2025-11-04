@@ -16,7 +16,7 @@
  * Key Security Decisions:
  * - User data is private and only writable by the user themselves.
  * - Accountants can read any user's data but cannot write or modify it.
- * - Listing all users is not permitted for security and privacy.
+ * - Listing all users is now permitted for accountants.
  */
 rules_version = '2';
 service cloud.firestore {
@@ -32,15 +32,15 @@ service cloud.firestore {
 
     /**
      * @description Protects the user profile. Only the authenticated user can write their own profile.
-     * Accountants can read any profile.
+     * Accountants can read any profile and list all users.
      * @path /users/{userId}
      * @allow (create, update, delete) - Authenticated user can C/U/D their profile if the userId matches their auth.uid.
      * @allow (get) - Authenticated user can read their profile, or an accountant can read any profile.
-     * @deny (list) - Listing all users is not permitted.
+     * @allow (list) - Accountants can list all users.
      */
     match /users/{userId} {
       allow get: if isOwner(userId) || isAccountant();
-      allow list: if false; // Listing all users is not permitted.
+      allow list: if isAccountant();
       allow create: if isOwner(userId) && request.resource.data.id == userId;
       allow update: if isOwner(userId) && request.resource.data.id == resource.data.id; //Enforce immutability of user ID
       allow delete: if isOwner(userId);

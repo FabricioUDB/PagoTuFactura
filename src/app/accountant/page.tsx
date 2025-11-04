@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
+import UserList from '@/components/accountant/user-list';
 
 export default function AccountantPage() {
   const { user, isUserLoading } = useUser();
@@ -35,7 +36,7 @@ export default function AccountantPage() {
               <Skeleton className="h-4 w-2/3" />
             </CardHeader>
             <CardContent>
-              <Skeleton className="h-10 w-full" />
+              <Skeleton className="h-40 w-full" />
             </CardContent>
           </Card>
         </div>
@@ -59,7 +60,7 @@ export default function AccountantPage() {
                 </CardDescription>
             </CardHeader>
             <CardContent>
-                <p>Customer management features will be implemented here.</p>
+                <UserList />
             </CardContent>
         </Card>
       </div>
