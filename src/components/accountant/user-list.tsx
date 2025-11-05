@@ -5,7 +5,9 @@ import { collection, query } from 'firebase/firestore';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { AlertTriangle } from 'lucide-react';
+import { AlertTriangle, FileText } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import Link from 'next/link';
 
 interface User {
   id: string;
@@ -15,10 +17,9 @@ interface User {
 
 export default function UserList() {
   const firestore = useFirestore();
-  const { user } = useUser(); // Get user for auth check
+  const { user } = useUser();
 
   const usersQuery = useMemoFirebase(() => {
-    // Only create the query if both firestore and a user are available
     if (!firestore || !user) return null;
     return query(collection(firestore, 'users'));
   }, [firestore, user]);
@@ -57,6 +58,7 @@ export default function UserList() {
         <TableRow>
           <TableHead>Nombre</TableHead>
           <TableHead>Correo Electrónico</TableHead>
+          <TableHead className="text-right">Acciones</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
@@ -64,6 +66,14 @@ export default function UserList() {
           <TableRow key={user.id}>
             <TableCell>{user.name || 'N/A'}</TableCell>
             <TableCell>{user.email}</TableCell>
+            <TableCell className="text-right">
+              <Button asChild variant="outline" size="sm">
+                <Link href={`/accountant/users/${user.id}/invoices`}>
+                  <FileText className="mr-2 h-4 w-4" />
+                  Ver Recibos
+                </Link>
+              </Button>
+            </TableCell>
           </TableRow>
         ))}
       </TableBody>
