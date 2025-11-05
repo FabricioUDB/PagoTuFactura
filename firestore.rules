@@ -39,15 +39,13 @@ service cloud.firestore {
       allow create: if isOwner(userId) && request.resource.data.id == userId;
       allow update: if isOwner(userId) && request.resource.data.id == resource.data.id; //Enforce immutability of user ID
       allow delete: if isOwner(userId);
-    }
-    
-    // DEV-ONLY: Allow any signed-in user to list users. In production, this should be isAccountant().
-    match /users/{userId} {
-        allow list: if isSignedIn();
+      // DEV-ONLY: Allow any signed-in user to list users. In production, this should be isAccountant().
+      allow list: if isSignedIn();
     }
 
     match /users/{userId}/invoices/{invoiceId} {
-      allow get, list: if isOwner(userId) || isAccountant();
+      // DEV-ONLY: Allow any signed-in user to view invoices. In production, this should be (isOwner(userId) || isAccountant()).
+      allow get, list: if isSignedIn();
       allow create: if isOwner(userId) && request.resource.data.userId == userId;
       allow update: if isOwner(userId) && request.resource.data.userId == resource.data.userId; //Enforce immutability of userId
       allow delete: if isOwner(userId);
