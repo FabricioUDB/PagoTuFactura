@@ -41,22 +41,22 @@ export default function UserList() {
             <AlertTriangle className="h-4 w-4" />
             <AlertTitle>Error</AlertTitle>
             <AlertDescription>
-                Failed to load users. You may not have the required permissions.
+                No se pudieron cargar los usuarios. Es posible que no tenga los permisos necesarios.
             </AlertDescription>
         </Alert>
     );
   }
 
   if (!users || users.length === 0) {
-    return <p>No users found.</p>;
+    return <p>No se encontraron usuarios.</p>;
   }
 
   return (
     <Table>
       <TableHeader>
         <TableRow>
-          <TableHead>Name</TableHead>
-          <TableHead>Email</TableHead>
+          <TableHead>Nombre</TableHead>
+          <TableHead>Correo Electrónico</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>

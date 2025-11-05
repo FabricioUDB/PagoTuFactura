@@ -47,7 +47,7 @@ export default function Header() {
                 <Button asChild variant="ghost" size="sm">
                     <Link href="/accountant">
                         <ShieldCheck className="mr-2 h-4 w-4" />
-                        Accountant
+                        Contador
                     </Link>
                 </Button>
               )}
@@ -61,7 +61,7 @@ export default function Header() {
             <Button asChild variant="outline" size="sm">
               <Link href="/login">
                 <LogIn className="mr-2 h-4 w-4" />
-                Login
+                Iniciar Sesión
               </Link>
             </Button>
           ))}

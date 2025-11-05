@@ -47,16 +47,16 @@ export default function AccountantPage() {
   return (
     <div className="container mx-auto p-4 md:p-8">
       <div className="space-y-4">
-        <h1 className="text-3xl font-bold">Accountant Dashboard</h1>
+        <h1 className="text-3xl font-bold">Panel de Contador</h1>
         <p className="text-muted-foreground">
-          Welcome, {user?.displayName || user?.email}. Here you can manage customer meters and generate receipts.
+          Bienvenido, {user?.displayName || user?.email}. Aquí puede gestionar los medidores de los clientes y generar recibos.
         </p>
 
         <Card>
             <CardHeader>
-                <CardTitle>Customer Overview</CardTitle>
+                <CardTitle>Resumen de Clientes</CardTitle>
                 <CardDescription>
-                    View and manage customer data.
+                    Ver y gestionar los datos de los clientes.
                 </CardDescription>
             </CardHeader>
             <CardContent>

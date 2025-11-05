@@ -68,9 +68,9 @@ export default function LoginPage() {
     <div className="flex min-h-[calc(100vh-57px)] items-center justify-center p-4">
       <Card className="w-full max-w-sm">
         <CardHeader>
-          <CardTitle>Login</CardTitle>
+          <CardTitle>Iniciar Sesión</CardTitle>
           <CardDescription>
-            Enter your credentials to access your account.
+            Ingresa tus credenciales para acceder a tu cuenta.
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -81,7 +81,7 @@ export default function LoginPage() {
                 name="email"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Email</FormLabel>
+                    <FormLabel>Correo Electrónico</FormLabel>
                     <FormControl>
                       <Input
                         placeholder="john.doe@example.com"
@@ -98,7 +98,7 @@ export default function LoginPage() {
                 name="password"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Password</FormLabel>
+                    <FormLabel>Contraseña</FormLabel>
                     <FormControl>
                       <Input placeholder="********" {...field} type="password" />
                     </FormControl>
@@ -107,7 +107,7 @@ export default function LoginPage() {
                 )}
               />
               <Button type="submit" className="w-full">
-                Login
+                Iniciar Sesión
               </Button>
             </form>
           </Form>
@@ -117,7 +117,7 @@ export default function LoginPage() {
             </div>
             <div className="relative flex justify-center text-xs uppercase">
               <span className="bg-background px-2 text-muted-foreground">
-                Or continue with
+                O continuar con
               </span>
             </div>
           </div>
@@ -131,9 +131,9 @@ export default function LoginPage() {
         </CardContent>
         <CardFooter className="flex justify-center">
           <p className="text-sm text-muted-foreground">
-            {"Don't have an account? "}
+            {'¿No tienes una cuenta? '}
             <Link href="/signup" className="text-primary hover:underline">
-              Sign up
+              Regístrate
             </Link>
           </p>
         </CardFooter>
