@@ -46,7 +46,8 @@ service cloud.firestore {
     match /users/{userId}/invoices/{invoiceId} {
       // DEV-ONLY: Allow any signed-in user to view invoices. In production, this should be (isOwner(userId) || isAccountant()).
       allow get, list: if isSignedIn();
-      allow create: if isOwner(userId) && request.resource.data.userId == userId;
+      // DEV-ONLY: Allow any signed-in user to create invoices. In production, this should be isAccountant()
+      allow create: if isSignedIn();
       allow update: if isOwner(userId) && request.resource.data.userId == resource.data.userId; //Enforce immutability of userId
       allow delete: if isOwner(userId);
     }
