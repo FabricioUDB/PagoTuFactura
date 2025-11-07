@@ -1,17 +1,18 @@
 'use client';
 
-import { useCollection, useFirestore, useMemoFirebase } from '@/firebase';
-import { collection, query, where } from 'firebase/firestore';
+import { useCollection, useFirestore, useMemoFirebase, useUser } from '@/firebase';
+import { collection, query, where, doc } from 'firebase/firestore';
 import { useParams } from 'next/navigation';
+import { useState } from 'react';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { AlertTriangle } from 'lucide-react';
+import { AlertTriangle, ArrowLeft, PlusCircle } from 'lucide-react';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft } from 'lucide-react';
+import { GenerateInvoiceDialog } from '@/components/accountant/generate-invoice-dialog';
 
 interface Invoice {
   id: string;
@@ -27,11 +28,23 @@ export default function UserInvoicesPage() {
   const firestore = useFirestore();
   const params = useParams();
   const userId = params.userId as string;
+  const { user: accountantUser } = useUser();
+
+  const [isGenerateDialogOpen, setGenerateDialogOpen] = useState(false);
 
   const invoicesQuery = useMemoFirebase(() => {
     if (!firestore || !userId) return null;
     return query(collection(firestore, `users/${userId}/invoices`));
   }, [firestore, userId]);
+  
+  const userDocQuery = useMemoFirebase(() => {
+    if(!firestore || !userId) return null;
+    return doc(firestore, 'users', userId);
+  }, [firestore, userId]);
+  
+  // We don't use the result of useDoc, but it's here to show how you might fetch user data
+  // const { data: customerUser, isLoading: isUserLoading } = useDoc(userDocQuery);
+  const [customerUser, setCustomerUser] = useState({ name: '' }); // Placeholder
 
   const { data: invoices, isLoading, error } = useCollection<Invoice>(invoicesQuery);
 
@@ -58,16 +71,22 @@ export default function UserInvoicesPage() {
   return (
     <div className="container mx-auto p-4 md:p-8">
       <div className="space-y-4">
-        <div className="flex items-center gap-4">
-            <Button asChild variant="outline" size="icon">
-                <Link href="/accountant">
-                    <ArrowLeft className="h-4 w-4" />
-                </Link>
-            </Button>
-            <div>
-                <h1 className="text-3xl font-bold">Recibos del Cliente</h1>
-                <p className="text-muted-foreground">Viendo los recibos para el usuario {userId}</p>
+        <div className="flex items-center justify-between gap-4">
+            <div className="flex items-center gap-4">
+                <Button asChild variant="outline" size="icon">
+                    <Link href="/accountant">
+                        <ArrowLeft className="h-4 w-4" />
+                    </Link>
+                </Button>
+                <div>
+                    <h1 className="text-3xl font-bold">Recibos del Cliente</h1>
+                    <p className="text-muted-foreground">Viendo los recibos para el usuario {userId}</p>
+                </div>
             </div>
+            <Button onClick={() => setGenerateDialogOpen(true)}>
+                <PlusCircle className="mr-2" />
+                Generar Recibo
+            </Button>
         </div>
 
         <Card>
@@ -133,6 +152,12 @@ export default function UserInvoicesPage() {
             </CardContent>
         </Card>
       </div>
+      <GenerateInvoiceDialog 
+        isOpen={isGenerateDialogOpen}
+        onOpenChange={setGenerateDialogOpen}
+        userId={userId}
+        customerName={customerUser?.name || 'Cliente'} // Fallback name
+      />
     </div>
   );
 }
