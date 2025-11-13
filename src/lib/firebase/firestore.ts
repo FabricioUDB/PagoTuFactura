@@ -1,10 +1,13 @@
 
 'use client';
 
-import { doc, getDoc, setDoc, addDoc, collection } from 'firebase/firestore';
-import { db } from './config';
+import { doc, getDoc, setDoc, addDoc, collection, Firestore } from 'firebase/firestore';
+import { initializeFirebase } from '@/firebase';
 import { errorEmitter } from '@/firebase/error-emitter';
 import { FirestorePermissionError } from '@/firebase/errors';
+
+// Get firestore instance from the centralized initialization
+const { firestore: db } = initializeFirebase();
 
 interface UserProfile {
     id: string;

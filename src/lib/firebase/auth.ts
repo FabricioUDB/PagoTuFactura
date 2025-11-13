@@ -7,12 +7,17 @@ import {
   signOut,
   GoogleAuthProvider,
   signInWithPopup,
-  type User,
+  type Auth,
 } from 'firebase/auth';
-import { auth } from './config';
 import { loginSchema, signupSchema } from '@/lib/schemas';
 import type { z } from 'zod';
 import { createUserProfile, getUserProfile } from './firestore';
+import { getAuth } from "firebase/auth";
+import { initializeFirebase } from "@/firebase";
+
+// Get auth instance from the centralized initialization
+const { auth } = initializeFirebase();
+
 
 export async function signUpWithEmail(data: z.infer<typeof signupSchema>) {
   const { email, password } = data;
