@@ -1,6 +1,6 @@
 'use client';
 
-import { Droplet, LogIn, LogOut, ShieldCheck } from 'lucide-react';
+import { BookUser, Droplet, LogIn, LogOut, ShieldCheck } from 'lucide-react';
 import Link from 'next/link';
 import { useUser } from '@/firebase';
 import { Button } from '@/components/ui/button';
@@ -43,6 +43,12 @@ export default function Header() {
         {!isUserLoading &&
           (user ? (
             <>
+              <Button asChild variant="ghost" size="sm">
+                <Link href="/account-statement">
+                  <BookUser className="mr-2 h-4 w-4" />
+                  Mi Cuenta
+                </Link>
+              </Button>
               {isAccountant && (
                 <Button asChild variant="ghost" size="sm">
                     <Link href="/accountant">
