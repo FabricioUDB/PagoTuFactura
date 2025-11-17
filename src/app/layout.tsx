@@ -5,7 +5,7 @@ import Header from '@/components/layout/header';
 import { FirebaseClientProvider } from '@/firebase';
 
 export const metadata: Metadata = {
-  title: 'Pago de Recibo de Agua',
+  title: 'ADACECAM - Pago de Recibo de Agua',
   description: 'Paga tu recibo de agua de forma rápida y segura.',
 };
 

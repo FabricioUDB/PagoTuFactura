@@ -64,7 +64,7 @@ export function PaymentSuccess({ billDetails, cardHolder, cardNumber, onReset }:
             <div className="flex items-center gap-4">
               <Droplet className="h-10 w-10 text-primary" />
               <div>
-                <h1 className="text-xl font-bold">Agua Pura S.A. de C.V.</h1>
+                <h1 className="text-xl font-bold">ADACECAM S.A. de C.V.</h1>
                 <p className="text-sm text-muted-foreground">
                   Calle de la pureza 123, Colonia Hidratación, C.P. 54321
                 </p>
@@ -94,7 +94,7 @@ export function PaymentSuccess({ billDetails, cardHolder, cardNumber, onReset }:
                 <div className="flex justify-between"><span className="font-semibold">Nombre:</span><span>{cardHolder}</span></div>
                 <div className="flex justify-between"><span className="font-semibold">Marca Tarjeta:</span><span>N/A</span></div>
                 <div className="flex justify-between"><span className="font-semibold">Forma de Pago:</span><span>Pago Electrónico</span></div>
-                <div className="flex justify-between"><span className="font-semibold">Banco:</span><span>POS Agua Pura</span></div>
+                <div className="flex justify-between"><span className="font-semibold">Banco:</span><span>POS ADACECAM</span></div>
                 <div className="flex justify-between"><span className="font-semibold">Fecha:</span><span>{format(paymentDate, "dd/MM/yyyy HH:mm:ss a")}</span></div>
                 <div className="flex justify-between"><span className="font-semibold">Número Autorización:</span><span>{authNumber}</span></div>
                 <div className="flex justify-between"><span className="font-semibold">Monto Total:</span><span className="font-bold text-base">${billDetails.amount.toFixed(2)}</span></div>

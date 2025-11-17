@@ -80,7 +80,7 @@ export function GenerateInvoiceDialog({
             items: data.items,
             totalAmount,
             date: currentDate,
-            companyName: "Agua Pura S.A. de C.V.",
+            companyName: "ADACECAM S.A. de C.V.",
             companyAddress: "Calle de la pureza 123, Colonia Hidratación, C.P. 54321",
             companyContact: "Tel: 555-123-4567",
             legalRequirements: "Factura válida para fines fiscales en México."
