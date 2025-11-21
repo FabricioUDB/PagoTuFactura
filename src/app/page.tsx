@@ -12,35 +12,32 @@ export default function Home() {
 
   return (
     <div className="flex min-h-screen flex-col bg-background">
-      <section className="w-full py-12 md:py-24 lg:py-32 xl:py-48 bg-primary/10">
-        <div className="container grid items-center gap-6 px-4 md:px-6 lg:grid-cols-2 lg:gap-10">
-          <div className="flex flex-col justify-center space-y-4">
-            <div className="space-y-2">
-              <h1 className="text-3xl font-bold tracking-tighter sm:text-5xl xl:text-6xl/none text-primary">
+      <section className="relative w-full h-[60vh] flex items-center justify-center text-center text-white">
+        {heroImage && (
+          <Image
+            src={heroImage.imageUrl}
+            alt={heroImage.description}
+            fill
+            className="object-cover -z-20"
+            data-ai-hint={heroImage.imageHint}
+            priority
+          />
+        )}
+        <div className="absolute inset-0 bg-black/50 -z-10" />
+        <div className="container px-4 md:px-6">
+          <div className="flex flex-col items-center space-y-4">
+              <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl lg:text-7xl/none">
                 Paga tu recibo de agua, fácil y rápido
               </h1>
-              <p className="max-w-[600px] text-muted-foreground md:text-xl">
+              <p className="max-w-[700px] text-lg md:text-xl">
                 Consulta tu saldo y realiza tu pago en línea de forma segura. Además, descubre consejos para cuidar el agua.
               </p>
-            </div>
-            <div className="flex justify-start">
+            <div className="flex justify-center pt-4">
               <Link href="/payment">
                 <Button size="lg">Pagar mi recibo</Button>
               </Link>
             </div>
           </div>
-          {heroImage && (
-            <div className="flex items-center justify-center">
-              <Image
-                src={heroImage.imageUrl}
-                width={600}
-                height={400}
-                alt={heroImage.description}
-                data-ai-hint={heroImage.imageHint}
-                className="mx-auto aspect-video overflow-hidden rounded-xl object-cover"
-              />
-            </div>
-          )}
         </div>
       </section>
       <section className="w-full py-12 md:py-24 lg:py-32 flex justify-center">
