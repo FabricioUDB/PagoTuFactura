@@ -8,7 +8,7 @@ import Link from 'next/link';
 
 export default function Home() {
   const blogPosts = PlaceHolderImages.filter((img) => img.id.startsWith('blog-'));
-  
+
   return (
     <div className="flex min-h-screen flex-col bg-background">
       <section className="relative w-full h-[60vh] flex items-center justify-center text-center text-white">
@@ -23,12 +23,12 @@ export default function Home() {
         <div className="absolute inset-0 bg-black/50 -z-10" />
         <div className="container px-4 md:px-6">
           <div className="flex flex-col items-center space-y-4">
-              <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl lg:text-7xl/none">
-                Paga tu recibo de agua, fácil y rápido
-              </h1>
-              <p className="max-w-[700px] text-lg md:text-xl">
-                Consulta tu saldo y realiza tu pago en línea de forma segura. Además, descubre consejos para cuidar el agua.
-              </p>
+            <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl lg:text-7xl/none">
+              Paga tu recibo de agua, fácil y rápido
+            </h1>
+            <p className="max-w-[700px] text-lg md:text-xl">
+              Consulta tu saldo y realiza tu pago en línea de forma segura. Además, descubre consejos para cuidar el agua.
+            </p>
             <div className="flex justify-center pt-4">
               <Link href="/payment">
                 <Button size="lg">Pagar mi recibo</Button>
