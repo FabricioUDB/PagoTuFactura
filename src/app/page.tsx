@@ -13,16 +13,14 @@ export default function Home() {
   return (
     <div className="flex min-h-screen flex-col bg-background">
       <section className="relative w-full h-[60vh] flex items-center justify-center text-center text-white">
-        {heroImage && (
-          <Image
-            src={heroImage.imageUrl}
-            alt={heroImage.description}
-            fill
-            className="object-cover -z-20"
-            data-ai-hint={heroImage.imageHint}
-            priority
-          />
-        )}
+        <Image
+          src="/hero-water-payment.jpg"
+          alt="Clean water drops on a surface"
+          fill
+          className="object-cover -z-20"
+          data-ai-hint="water drops"
+          priority
+        />
         <div className="absolute inset-0 bg-black/50 -z-10" />
         <div className="container px-4 md:px-6">
           <div className="flex flex-col items-center space-y-4">
