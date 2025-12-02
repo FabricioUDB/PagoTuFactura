@@ -1,26 +1,26 @@
 export const placeholderImages = [
-    {
-      "id": "hero-water-payment",
-      "description": "Clean water drops on a surface",
-      "imageUrl": "https://images.unsplash.com/photo-1714282776498-c2db7561f9fb?q=80&w=1169&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-      "imageHint": "water drops"
-    },
-    {
-      "id": "blog-1",
-      "description": "Reduce tu consumo en la ducha",
-      "imageUrl": "https://images.unsplash.com/photo-1640950672909-66c6ab3aa49c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHx3YXRlciUyMHNhdmluZ3xlbnwwfHx8fDE3NjE4NzI1Mzl8MA&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "water saving"
-    },
-    {
-      "id": "blog-2",
-      "description": "Repara fugas y goteos",
-      "imageUrl": "https://images.unsplash.com/photo-1637172459136-6e9434076a61?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHxsZWFreSUyMGZhdWNldHxlbnwwfHx8fDE3NjE5MjAxMDV8MA&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "leaky faucet"
-    },
-    {
-      "id": "blog-3",
-      "description": "Usa la lavadora de forma eficiente",
-      "imageUrl": "https://images.unsplash.com/photo-1668417863230-64f268d1d252?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHx3YXNoaW5nJTIwbWFjaGluZXxlbnwwfHx8fDE3NjE4Njc4MDB8MA&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "washing machine"
-    }
-  ]
+  {
+    "id": "hero-water-payment",
+    "description": "Clean water drops on a surface",
+    "imageUrl": "https://images.unsplash.com/photo-1590318719961-6e74a0cccfcb?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    "imageHint": "water drops"
+  },
+  {
+    "id": "blog-1",
+    "description": "Reduce tu consumo en la ducha",
+    "imageUrl": "https://images.unsplash.com/photo-1640950672909-66c6ab3aa49c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHx3YXRlciUyMHNhdmluZ3xlbnwwfHx8fDE3NjE4NzI1Mzl8MA&ixlib=rb-4.1.0&q=80&w=1080",
+    "imageHint": "water saving"
+  },
+  {
+    "id": "blog-2",
+    "description": "Repara fugas y goteos",
+    "imageUrl": "https://images.unsplash.com/photo-1637172459136-6e9434076a61?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHxsZWFreSUyMGZhdWNldHxlbnwwfHx8fDE3NjE5MjAxMDV8MA&ixlib=rb-4.1.0&q=80&w=1080",
+    "imageHint": "leaky faucet"
+  },
+  {
+    "id": "blog-3",
+    "description": "Usa la lavadora de forma eficiente",
+    "imageUrl": "https://images.unsplash.com/photo-1668417863230-64f268d1d252?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHx3YXNoaW5nJTIwbWFjaGluZXxlbnwwfHx8fDE3NjE4Njc4MDB8MA&ixlib=rb-4.1.0&q=80&w=1080",
+    "imageHint": "washing machine"
+  }
+]
