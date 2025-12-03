@@ -65,7 +65,7 @@ export async function getUserProfile(userId: string): Promise<UserProfile | null
             return docSnap.data() as UserProfile;
         }
         return null;
-    } catch(error) {
+    } catch (error) {
         errorEmitter.emit(
             'permission-error',
             new FirestorePermissionError({
@@ -91,7 +91,7 @@ export async function addInvoice(userId: string, invoiceData: Invoice) {
             ...invoiceData
         });
     } catch (error) {
-         errorEmitter.emit(
+        errorEmitter.emit(
             'permission-error',
             new FirestorePermissionError({
                 path: invoicesCollectionRef.path,
@@ -101,6 +101,22 @@ export async function addInvoice(userId: string, invoiceData: Invoice) {
         );
         console.error("Error adding invoice: ", error);
         // Re-throw the error to be caught by the calling function's try/catch block
+        throw error;
+    }
+}
+
+/**
+ * Updates the status of an invoice.
+ * @param userId The ID of the user.
+ * @param invoiceId The ID of the invoice to update.
+ * @param status The new status.
+ */
+export async function updateInvoiceStatus(userId: string, invoiceId: string, status: 'Draft' | 'Sent' | 'Paid' | 'Overdue' | 'Cancelled') {
+    const invoiceDocRef = doc(db, 'users', userId, 'invoices', invoiceId);
+    try {
+        await setDoc(invoiceDocRef, { status }, { merge: true });
+    } catch (error) {
+        console.error("Error updating invoice status: ", error);
         throw error;
     }
 }

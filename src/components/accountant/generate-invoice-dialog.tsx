@@ -74,17 +74,28 @@ export function GenerateInvoiceDialog({
         const currentDate = new Date().toISOString();
 
         // 1. Call AI to get compliant invoice text (optional for DB save)
-        const aiResponse = await generateCompliantInvoice({
-            customerName,
-            invoiceNumber,
-            items: data.items,
-            totalAmount,
-            date: currentDate,
-            companyName: "ADACECAM S.A. de C.V.",
-            companyAddress: "Calle de la pureza 123, Colonia Hidratación, C.P. 54321",
-            companyContact: "Tel: 555-123-4567",
-            legalRequirements: "Factura válida para fines fiscales en México."
-        });
+        let compliantText = '';
+        try {
+            const aiResponse = await generateCompliantInvoice({
+                customerName,
+                invoiceNumber,
+                items: data.items,
+                totalAmount,
+                date: currentDate,
+                companyName: "ADACECAM S.A. de C.V.",
+                companyAddress: "Calle de la pureza 123, Colonia Hidratación, C.P. 54321",
+                companyContact: "Tel: 555-123-4567",
+                legalRequirements: "Factura válida para fines fiscales en México."
+            });
+            compliantText = aiResponse.compliantInvoice;
+        } catch (aiError) {
+            console.warn("AI generation failed, proceeding without compliant text:", aiError);
+            toast({
+                title: 'Advertencia',
+                description: 'El recibo se generó, pero no se pudo generar el texto legal con IA.',
+                variant: 'default', // Or a warning variant if available
+            });
+        }
 
       // 2. Save the structured data to Firestore
       await addInvoice(userId, {
@@ -95,7 +106,7 @@ export function GenerateInvoiceDialog({
         totalAmount,
         status: 'Draft',
         items: data.items,
-        compliantText: aiResponse.compliantInvoice, // Store the AI-generated text
+        compliantText: compliantText, // Store the AI-generated text (or empty string)
       });
 
       toast({
