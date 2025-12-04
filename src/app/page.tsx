@@ -18,13 +18,13 @@ export default function Home() {
             src={heroImage.imageUrl}
             alt={heroImage.description}
             fill
-            className="object-cover -z-20"
+            className="object-cover"
             data-ai-hint={heroImage.imageHint}
             priority
           />
         )}
-        <div className="absolute inset-0 bg-black/50 -z-10" />
-        <div className="container px-4 md:px-6">
+        <div className="absolute inset-0 bg-black/50 z-10" />
+        <div className="container px-4 md:px-6 relative z-20">
           <div className="flex flex-col items-center space-y-4">
             <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl lg:text-7xl/none">
               Paga tu recibo de agua, fácil y rápido
