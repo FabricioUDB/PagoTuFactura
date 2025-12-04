@@ -1,12 +1,19 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
 
-import { useUser, useFirestore } from '@/firebase';
+import {
+  useUser,
+  useFirestore,
+  useMemoFirebase,
+  useCollection,
+} from '@/firebase';
+
+import { collection, query, orderBy } from 'firebase/firestore';
 
 import {
   Card,
@@ -28,14 +35,6 @@ import {
 } from '@/components/ui/table';
 import { Button } from '@/components/ui/button';
 
-import {
-  collection,
-  query,
-  orderBy,
-  getDocs,
-  DocumentData,
-} from 'firebase/firestore';
-
 interface Invoice {
   id: string;
   issueDate: string;
@@ -46,10 +45,6 @@ export default function AccountStatementPage() {
   const firestore = useFirestore();
   const router = useRouter();
 
-  const [invoices, setInvoices] = useState<Invoice[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
   // Redirigir a /login si no hay usuario
   useEffect(() => {
     if (!isUserLoading && !user) {
@@ -57,47 +52,21 @@ export default function AccountStatementPage() {
     }
   }, [user, isUserLoading, router]);
 
-  // Cargar facturas desde Firestore
-  useEffect(() => {
-    const fetchInvoices = async () => {
-      if (!user || !firestore) return;
+  const invoicesQuery = useMemoFirebase(() => {
+    if (!firestore || !user) return null;
+    return query(
+      collection(firestore, `users/${user.uid}/invoices`),
+      orderBy('issueDate', 'desc'),
+    );
+  }, [firestore, user]);
 
-      try {
-        setIsLoading(true);
-        setError(null);
+  const {
+    data: invoices,
+    isLoading,
+    error,
+  } = useCollection<Invoice>(invoicesQuery);
 
-        const invoicesRef = collection(
-          firestore,
-          `users/${user.uid}/invoices`,
-        );
-        const q = query(invoicesRef, orderBy('issueDate', 'desc'));
-        const snapshot = await getDocs(q);
-
-        const data: Invoice[] = snapshot.docs.map((doc) => {
-          const docData = doc.data() as DocumentData;
-          return {
-            id: doc.id,
-            issueDate: String(docData.issueDate),
-          };
-        });
-
-        setInvoices(data);
-      } catch (err) {
-        console.error('Error loading invoices', err);
-        setError(
-          'No se pudieron cargar sus recibos. Por favor, intente de nuevo más tarde.',
-        );
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    if (!isUserLoading && user) {
-      fetchInvoices();
-    }
-  }, [user, isUserLoading, firestore]);
-
-  // Skeleton mientras se verifica el usuario
+  // Estado de carga inicial o cuando aún no hay usuario resuelto
   if (isUserLoading || !user) {
     return (
       <div className="container mx-auto p-4 md:p-8">
@@ -109,7 +78,7 @@ export default function AccountStatementPage() {
               <Skeleton className="h-6 w-1/3" />
             </CardHeader>
             <CardContent>
-              <div className="space-y-2 mt-4">
+              <div className="mt-4 space-y-2">
                 <Skeleton className="h-10 w-full" />
                 <Skeleton className="h-10 w-full" />
                 <Skeleton className="h-10 w-full" />
@@ -144,60 +113,57 @@ export default function AccountStatementPage() {
           )}
 
           {error && (
-            <Alert variant="destructive" className="mt-4">
+            <Alert variant="destructive">
               <AlertTriangle className="h-4 w-4" />
               <AlertTitle>Error</AlertTitle>
-              <AlertDescription>{error}</AlertDescription>
+              <AlertDescription>
+                No se pudieron cargar sus recibos. Por favor, intente de nuevo
+                más tarde.
+              </AlertDescription>
             </Alert>
           )}
 
           {!isLoading && !error && (
-            <>
-              {invoices.length === 0 ? (
-                <p className="mt-2">No se encontraron recibos.</p>
-              ) : (
-                <Table className="mt-4">
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>Generado</TableHead>
-                      <TableHead>Fecha de Corte</TableHead>
-                      <TableHead className="text-right">Acciones</TableHead>
+            !invoices || invoices.length === 0 ? (
+              <p>No se encontraron recibos.</p>
+            ) : (
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Generado</TableHead>
+                    <TableHead>Fecha de Corte</TableHead>
+                    <TableHead className="text-right">Acciones</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {invoices.map((invoice) => (
+                    <TableRow key={invoice.id}>
+                      <TableCell className="capitalize">
+                        {format(new Date(invoice.issueDate), 'MMMM yyyy', {
+                          locale: es,
+                        })}
+                      </TableCell>
+                      <TableCell>
+                        {format(new Date(invoice.issueDate), 'MMM dd yyyy', {
+                          locale: es,
+                        })}
+                      </TableCell>
+                      <TableCell className="text-right">
+                        <Button asChild variant="outline" size="sm">
+                          <Link
+                            href={`/account-statement/${invoice.id}`}
+                            target="_blank"
+                          >
+                            <ExternalLink className="mr-2 h-4 w-4" />
+                            Ver
+                          </Link>
+                        </Button>
+                      </TableCell>
                     </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {invoices.map((invoice) => (
-                      <TableRow key={invoice.id}>
-                        <TableCell className="capitalize">
-                          {format(
-                            new Date(invoice.issueDate),
-                            'MMMM yyyy',
-                            { locale: es },
-                          )}
-                        </TableCell>
-                        <TableCell>
-                          {format(
-                            new Date(invoice.issueDate),
-                            'MMM dd yyyy',
-                            { locale: es },
-                          )}
-                        </TableCell>
-                        <TableCell className="text-right">
-                          <Button asChild variant="outline" size="sm">
-                            <Link
-                              href={`/account-statement/${invoice.id}`}
-                              target="_blank"
-                            >
-                              <ExternalLink className="mr-2 h-4 w-4" />
-                              Ver
-                            </Link>
-                          </Button>
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              )}
-            </>
+                  ))}
+                </TableBody>
+              </Table>
+            )
           )}
         </CardContent>
       </Card>

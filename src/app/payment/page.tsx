@@ -2,7 +2,6 @@
 
 import WaterBillForm from '@/components/water/water-bill-form';
 import Image from 'next/image';
-
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 
 export default function PaymentPage() {
@@ -19,6 +18,7 @@ export default function PaymentPage() {
           data-ai-hint={heroImage.imageHint}
         />
       )}
+
       <div className="w-full max-w-md">
         <WaterBillForm />
       </div>
